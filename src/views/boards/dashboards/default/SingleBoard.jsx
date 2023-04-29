@@ -1,18 +1,15 @@
-import React from 'react';
-import { getUser } from 'hooks/hooks';
+import React, { useState } from 'react';
 import { useQuery } from 'react-query';
-import { useNavigate, useParams } from 'react-router-dom';
 import TaskCard from 'views/admin/dashboards/rtl/components/TaskCard';
 import { getBoard } from 'hooks/hooks';
-const SingleBoard = () => {
-  let { boardId } = useParams();
-  const navigate = useNavigate();
+import ModalList from './modal/ModalList';
+import { useParams } from 'react-router-dom';
 
-  console.log(boardId, "param")
-  const userQuery = useQuery({
-    queryKey: ['user'],
-    queryFn: getUser,
-  });
+const SingleBoard = ({ userQuery }) => {
+  let { boardId } = useParams();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [nData, setNdata] = useState({});
 
   const boardQuery = useQuery({
     queryKey: ['board', boardId],
@@ -23,15 +20,20 @@ const SingleBoard = () => {
     item.lS.map((subitem) => subitem)
   );
 
-  if (userQuery.status && boardQuery.status === 'loading') {
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  const handleOpen = () => {
+    setNdata('');
+    setIsOpen(true);
+  };
+
+  if (boardQuery.status === 'loading') {
     return <h1>Loading...</h1>;
   }
 
-  if (userQuery.status === 'error') {
-    return navigate('/auth/sign-in/default');
-  }
-
-  if (userQuery.status && boardQuery.status === 'error') {
+  if (boardQuery.status === 'error') {
     return <h1>{JSON.stringify(userQuery.error)}</h1>;
   }
 
@@ -44,9 +46,7 @@ const SingleBoard = () => {
           <div className="mb-5 grid grid-cols-6 gap-5">
             <div className="col-span-6 h-full w-full rounded-xl 3xl:col-span-4">
               <div className="my-5 grid grid-cols-1 gap-5 rounded-[20px] md:grid-cols-3 lg:grid-cols-3">
-                {console.log(boardQuery.data, "singleboard")}
                 {listQuery?.map((item, index) => {
-                //   console.log(item.cS)
                   return (
                     <TaskCard
                       user={userQuery?.data}
@@ -56,6 +56,22 @@ const SingleBoard = () => {
                     />
                   );
                 })}
+
+                <button
+                  type="button"
+                  onClick={handleOpen}
+                  className="mt-4 rounded border border-gray-800 px-8 py-3 font-semibold text-gray-800 hover:bg-gray-100 hover:text-brand-500"
+                >
+                  Add List
+                </button>
+                {isOpen && (
+                  <ModalList
+                    onClose={handleClose}
+                    isOpen={isOpen}
+                    user={userQuery?.data}
+                    nData={nData}
+                  />
+                )}
               </div>
             </div>
           </div>
