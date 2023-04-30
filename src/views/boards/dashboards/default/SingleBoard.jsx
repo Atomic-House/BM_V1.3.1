@@ -16,7 +16,6 @@ const SingleBoard = ({ userQuery }) => {
     queryFn: () => getBoard(boardId),
   });
 
-  console.log(boardQuery.data)
   const listQuery = boardQuery.data?.flatMap((item) =>
     item.lS.map((subitem) => subitem)
   );
@@ -27,6 +26,11 @@ const SingleBoard = ({ userQuery }) => {
 
   const handleOpen = () => {
     setNdata('');
+    setIsOpen(true);
+  };
+
+  const handleUpdateOpenList = (newData) => {
+    setNdata(newData);
     setIsOpen(true);
   };
 
@@ -54,6 +58,9 @@ const SingleBoard = ({ userQuery }) => {
                       key={item?.$id}
                       cards={item?.cS}
                       title={item?.title}
+                      ls_ID={item?.$id}
+                      list_data={item}
+                      handleUpdateOpenList={handleUpdateOpenList}
                     />
                   );
                 })}
@@ -71,6 +78,8 @@ const SingleBoard = ({ userQuery }) => {
                     isOpen={isOpen}
                     user={userQuery}
                     nData={nData}
+                    boardId={boardId}
+                    handleUpdateOpenList={handleUpdateOpenList}
                   />
                 )}
               </div>

@@ -11,7 +11,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { delCards } from 'hooks/hooks';
 
 
-const TaskCard = ({ cards, user, title }) => {
+const TaskCard = ({ cards, user, title, ls_ID,list_data, handleUpdateOpenList }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [nData, setNdata] = useState({});
   const queryClient = useQueryClient();
@@ -59,7 +59,7 @@ const TaskCard = ({ cards, user, title }) => {
             </h4>
           </div>
 
-          <CardMenu onOpen={handleOpen} />
+          <CardMenu onOpen={handleOpen} list_data={list_data} handleUpdateOpenList={handleUpdateOpenList}/>
         </div>
 
         {/* card content */}
@@ -96,8 +96,6 @@ const TaskCard = ({ cards, user, title }) => {
               <p className="text-base mb-5 font-bold text-navy-700 dark:text-white">
                 No Cards
               </p>
-              
-              {/* <button type="button" onClick={handleOpen} className="px-8 py-3 font-semibold border rounded border-gray-800 text-gray-800">Add</button> */}
             </div>
           </div>
         )}
@@ -109,6 +107,7 @@ const TaskCard = ({ cards, user, title }) => {
           isOpen={isOpen}
           user={user}
           nData={nData}
+          ls_ID={ls_ID}
         />
       )}
 

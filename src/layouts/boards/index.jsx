@@ -177,7 +177,7 @@ export default function Board(props) {
 
   return (
     <div className="flex h-full w-full">
-      <Sidebar open={open} onClose={() => setOpen(false)} routes={routes} />
+      <Sidebar open={open} onClose={() => setOpen(false)} routes={routes} user={userQuery.data} />
       {/* Navbar & Main Content */}
       <div className="h-full w-full font-dm dark:bg-navy-900">
         {/* Main Content */}
@@ -189,7 +189,7 @@ export default function Board(props) {
             <Portal>
               <Navbar
                 onOpenSidenav={() => setOpen(!open)}
-                logoText={'Horizon UI Dashboard PRO'}
+                logoText={'Bookmark Manager - Atomic House'}
                 brandText={currentRoute}
                 userData={userQuery.data}
                 secondary={getActiveNavbar(routes)}

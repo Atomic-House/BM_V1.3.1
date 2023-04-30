@@ -1,13 +1,30 @@
 import React, { useState } from "react";
 import Dropdown from "components/dropdown";
 import { BsFillBookmarkPlusFill, BsFillBookmarkXFill, BsThreeDots, BsThreeDotsVertical } from "react-icons/bs";
+import { useMutation, useQueryClient } from "react-query";
+import { delList } from "hooks/hooks";
 
 function CardMenu(props) {
-  const { transparent, vertical, onOpen, } = props;
-
+  const { transparent, vertical, onOpen, list_data, handleUpdateOpenList} = props;
   const [isOpen, setIsOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+
+  const deleteCard = useMutation({
+    mutationFn: (id) => {
+      return delList(id);
+    },
+    onSuccess: async () => {
+      queryClient.invalidateQueries('board');
+    },
+  });
+
+  const handleDeleteList = (id) => {
+    deleteCard.mutate(id);
+  };
+
   return (
-    <Dropdown
+   <Dropdown
       button={
         <button
         onClick={() => setIsOpen(!isOpen)}
@@ -41,13 +58,13 @@ function CardMenu(props) {
           </span>
           Add Card
         </button>
-        <button className="hover:text-black mt-2 flex cursor-pointer items-center gap-2 pt-1 text-gray-600 hover:font-medium">
+        <button onClick={()=>handleUpdateOpenList(list_data)} className="hover:text-black mt-2 flex cursor-pointer items-center gap-2 pt-1 text-gray-600 hover:font-medium">
           <span>
             <BsFillBookmarkXFill />
           </span>
-          Remove All Card
+          Edit List
         </button>
-        <button className="hover:text-black mt-2 flex cursor-pointer items-center gap-2 pt-1 text-gray-600 hover:font-medium">
+        <button onClick={()=>handleDeleteList(list_data.$id)} className="hover:text-black mt-2 flex cursor-pointer items-center gap-2 pt-1 text-gray-600 hover:font-medium">
           <span>
             <BsFillBookmarkXFill />
           </span>
@@ -56,6 +73,7 @@ function CardMenu(props) {
       </div>
       }
     />
+    
   );
 }
 

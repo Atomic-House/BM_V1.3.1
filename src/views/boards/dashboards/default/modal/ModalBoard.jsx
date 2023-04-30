@@ -13,7 +13,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { ID, Permission, Role } from 'appwrite';
 import { databases } from '../../../../../appwrite/appConfig';
 
-const ModalList = ({ isOpen, onClose, lid, nData, user }) => {
+const ModalBoard = ({ isOpen, onClose, nData, user, boardId }) => {
   const handleClose = () => {
     onClose();
   };
@@ -28,10 +28,11 @@ const ModalList = ({ isOpen, onClose, lid, nData, user }) => {
     (documentData) =>
       databases.createDocument(
         '64415eb6ac34bc0a9996',
-        '64415ed2d54470c01f7f',
+        '64415ec99997abcbc0c1',
         ID.unique(),
         {
           ...documentData,
+          bS: boardId,
         },
         [
           Permission.read(Role.user(user.$id)),
@@ -72,8 +73,8 @@ const ModalList = ({ isOpen, onClose, lid, nData, user }) => {
   );
 
   const handlerAdd = () => {
-    if (data.title) return alert('Title cannot be empty');
-    if (nData?.lid) {
+    // if (!data.title) return alert('Title cannot be empty');
+    if (nData.$id) {
       updateDocument.mutate({
         title: data.title,
       });
@@ -134,4 +135,4 @@ const ModalList = ({ isOpen, onClose, lid, nData, user }) => {
   );
 };
 
-export default ModalList;
+export default ModalBoard;

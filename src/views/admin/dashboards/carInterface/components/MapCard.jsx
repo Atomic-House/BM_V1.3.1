@@ -91,7 +91,7 @@ const MapCard = () => {
                   height="13"
                   rx="6.5"
                   stroke="#4318FF"
-                  stroke-width="3"
+                  strokeWidth="3"
                 />
               </svg>
             </p>
@@ -119,9 +119,9 @@ const MapCard = () => {
                 x2="0.999998"
                 y2="1"
                 stroke="url(#paint0_linear_103_13736)"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 stroke-dasharray="6 6"
               />
               <defs>

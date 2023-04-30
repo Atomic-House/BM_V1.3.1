@@ -14,7 +14,7 @@ import { ID, Permission, Role } from 'appwrite';
 import { databases } from '../../appwrite/appConfig';
 import { useMetadataFetcher } from 'hooks/hooks';
 
-const ModalCustom = ({ isOpen, onClose, nData, user }) => {
+const ModalCustom = ({ isOpen, onClose, nData, user, ls_ID }) => {
   const handleClose = () => {
     onClose();
   };
@@ -39,7 +39,7 @@ const ModalCustom = ({ isOpen, onClose, nData, user }) => {
         ID.unique(),
         {
           ...documentData,
-          lS: "644d4eede96c17a0e821",
+          lS: ls_ID,
         },
         [
           Permission.read(Role.user(user.$id)),
@@ -90,7 +90,7 @@ const ModalCustom = ({ isOpen, onClose, nData, user }) => {
   };
 
   const handlerAdd = () => {
-    if (nData?.title) {
+    if (nData.ls_ID) {
       updateDocument.mutate({
         title: data.title || metadata.title,
         url: data.url,
@@ -230,7 +230,7 @@ const ModalCustom = ({ isOpen, onClose, nData, user }) => {
 
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={handlerAdd}>
-              {nData?.lid ? "Edit" : "Add"}
+              {nData?.ls_ID ? "Edit" : "Add"}
             </Button>
             <Button variant="ghost" onClick={handleClose}>
               Cancle
