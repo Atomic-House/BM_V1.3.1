@@ -205,7 +205,7 @@ export default function Board(props) {
                   path="/"
                   element={<Navigate to="/boards/dashboards/default" replace />}
                 />
-                <Route path="/:boardId" element={<SingleBoard />} />
+                <Route path="/:boardId" element={<SingleBoard userQuery={userQuery.data} />} />
               </Routes>
             </div>
             <div className="p-3">

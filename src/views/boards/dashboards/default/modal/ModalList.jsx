@@ -28,22 +28,27 @@ const ModalList = ({ isOpen, onClose, lid, nData, user }) => {
     (documentData) =>
       databases.createDocument(
         '64415eb6ac34bc0a9996',
-        '64415ed2d54470c01f7f',
+        '64415ec99997abcbc0c1',
         ID.unique(),
         {
-          ...documentData,
-        },
-        [
-          Permission.read(Role.user(user.$id)),
-          Permission.update(Role.user(user.$id)),
-          Permission.delete(Role.user(user.$id)),
-        ]
+          title: 'Board 2 Raj 4',
+          lS: [
+            {
+              title: 'Helllo',
+              $permissions: [
+                Permission.read(Role.user(user.$id)),
+                Permission.update(Role.user(user.$id)),
+                Permission.delete(Role.user(user.$id)),
+              ],
+            },
+          ],
+        }
       ),
     {
       onSuccess: () => {
         setData({});
         handleClose();
-        queryClient.invalidateQueries('boards');
+        queryClient.invalidateQueries('board');
       },
       onError: (error) => {
         console.log(error); // Failure
@@ -63,7 +68,7 @@ const ModalList = ({ isOpen, onClose, lid, nData, user }) => {
       onSuccess: () => {
         setData({});
         handleClose();
-        queryClient.invalidateQueries('boards');
+        queryClient.invalidateQueries('board');
       },
       onError: (error) => {
         console.log(error); // Failure
@@ -72,7 +77,7 @@ const ModalList = ({ isOpen, onClose, lid, nData, user }) => {
   );
 
   const handlerAdd = () => {
-    if (data.title) return alert('Title cannot be empty');
+    // if (!data.title) return alert('Title cannot be empty');
     if (nData?.lid) {
       updateDocument.mutate({
         title: data.title,

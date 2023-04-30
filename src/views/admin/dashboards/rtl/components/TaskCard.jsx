@@ -34,7 +34,7 @@ const TaskCard = ({ cards, user, title }) => {
       return delCards(id);
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries('boards');
+      queryClient.invalidateQueries('board');
     },
   });
 

@@ -16,6 +16,7 @@ const SingleBoard = ({ userQuery }) => {
     queryFn: () => getBoard(boardId),
   });
 
+  console.log(boardQuery.data)
   const listQuery = boardQuery.data?.flatMap((item) =>
     item.lS.map((subitem) => subitem)
   );
@@ -34,7 +35,7 @@ const SingleBoard = ({ userQuery }) => {
   }
 
   if (boardQuery.status === 'error') {
-    return <h1>{JSON.stringify(userQuery.error)}</h1>;
+    return <h1>Error Please try again.</h1>;
   }
 
   return (
@@ -49,7 +50,7 @@ const SingleBoard = ({ userQuery }) => {
                 {listQuery?.map((item, index) => {
                   return (
                     <TaskCard
-                      user={userQuery?.data}
+                      user={userQuery}
                       key={item?.$id}
                       cards={item?.cS}
                       title={item?.title}
@@ -68,7 +69,7 @@ const SingleBoard = ({ userQuery }) => {
                   <ModalList
                     onClose={handleClose}
                     isOpen={isOpen}
-                    user={userQuery?.data}
+                    user={userQuery}
                     nData={nData}
                   />
                 )}
