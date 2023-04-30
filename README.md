@@ -91,3 +91,7 @@ new people that already use Horizon UI!
 ⭐️ [Copyright 2023 Horizon UI ](https://www.horizon-ui.com/?ref=readme-horizon-tailwind-react-pro)
 
 📄 [Horizon UI License](https://www.simmmple.com/licenses?ref=readme-horizon-tailwind-react-pro)
+
+
+
+---- Created by RAJ
