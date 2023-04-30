@@ -31,7 +31,7 @@ export const renderView = ({ style, ...props }) => {
       me={{ base: "0px !important", md: "-16px !important" }}
       style={{ ...style, ...viewStyle }}
       {...props}
-      div
+     
     />
   );
 };

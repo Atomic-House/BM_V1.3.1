@@ -14,10 +14,12 @@ import { ID, Permission, Role } from 'appwrite';
 import { databases } from '../../appwrite/appConfig';
 import { useMetadataFetcher } from 'hooks/hooks';
 
-const ModalCustom = ({ isOpen, onClose, lid, nData, user }) => {
+const ModalCustom = ({ isOpen, onClose, nData, user, ls_ID }) => {
   const handleClose = () => {
     onClose();
   };
+
+  console.log(nData)
 
   const [data, setData] = useState({
     title: nData.title || '',
@@ -37,7 +39,7 @@ const ModalCustom = ({ isOpen, onClose, lid, nData, user }) => {
         ID.unique(),
         {
           ...documentData,
-          lid: lid,
+          lS: ls_ID,
         },
         [
           Permission.read(Role.user(user.$id)),
@@ -49,7 +51,7 @@ const ModalCustom = ({ isOpen, onClose, lid, nData, user }) => {
       onSuccess: () => {
         setData({});
         handleClose();
-        queryClient.invalidateQueries('cards');
+        queryClient.invalidateQueries('board');
       },
       onError: (error) => {
         console.log(error); // Failure
@@ -69,13 +71,14 @@ const ModalCustom = ({ isOpen, onClose, lid, nData, user }) => {
       onSuccess: () => {
         setData({});
         handleClose();
-        queryClient.invalidateQueries('cards');
+        queryClient.invalidateQueries('board');
       },
       onError: (error) => {
         console.log(error); // Failure
       },
     }
   );
+
 
   const [url, setUrl] = useState('');
   const { metadata, favicon, error, fetchMetadata, fetching } = useMetadataFetcher();
@@ -87,8 +90,7 @@ const ModalCustom = ({ isOpen, onClose, lid, nData, user }) => {
   };
 
   const handlerAdd = () => {
-    if (data.title || metadata.title === '') return alert('Title cannot be empty');
-    if (nData?.lid) {
+    if (nData.ls_ID) {
       updateDocument.mutate({
         title: data.title || metadata.title,
         url: data.url,
@@ -132,9 +134,9 @@ const ModalCustom = ({ isOpen, onClose, lid, nData, user }) => {
                         value={data.title || metadata.title || ''}
                         className="w-full rounded border-blue-400 bg-gray-200 p-2"
                         onChange={(e) => {
-                            setData({ ...data, title: metadata.title })
+                            setData({ ...data, title: metadata.title });
                             
-                            setData({ ...data, title: e.target.value })
+                            setData({ ...data, title: e.target.value });
                           
                         }}
                       />
@@ -228,7 +230,7 @@ const ModalCustom = ({ isOpen, onClose, lid, nData, user }) => {
 
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={handlerAdd}>
-              {nData?.lid ? "Edit" : "Add"}
+              {nData?.ls_ID ? "Edit" : "Add"}
             </Button>
             <Button variant="ghost" onClick={handleClose}>
               Cancle

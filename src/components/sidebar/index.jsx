@@ -10,9 +10,27 @@ import {
 } from 'components/scrollbar/Scrollbar';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import Card from 'components/card';
+import { useState } from 'react';
+import ModalBoard from 'views/boards/dashboards/default/modal/ModalBoard';
+import { BsFillBookmarkPlusFill } from 'react-icons/bs';
 
-const SidebarHorizon = ({ open, onClose, variant, routes }) => {
+const SidebarHorizon = ({ open, onClose, variant, routes, user }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [nData, setNdata] = useState({});
 
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  const handleOpen = () => {
+    setNdata('');
+    setIsOpen(true);
+  };
+
+  const handleUpdateOpenList = (newData) => {
+    setNdata(newData);
+    setIsOpen(true);
+  };
 
   return (
     <div
@@ -49,12 +67,32 @@ const SidebarHorizon = ({ open, onClose, variant, routes }) => {
               </ul>
             </div>
             {/* Free Horizon Card    */}
-            {/* <div className="mt-[28px] mb-[150px] flex justify-center">
-              <SidebarCard />
-            </div> */}
+            <div className="flex justify-center p-10">
+              <div className="">
+                <button
+                  onClick={handleOpen}
+                  className="hover:text-black flex cursor-pointer items-center gap-2 text-gray-600 hover:font-medium"
+                >
+                  <span>
+                    <BsFillBookmarkPlusFill />
+                  </span>
+                  Add Board
+                </button>
+              </div>
+            </div>
           </div>
         </Scrollbars>
       </Card>
+      {isOpen && (
+        <ModalBoard
+          onClose={handleClose}
+          isOpen={isOpen}
+          user={user}
+          nData={nData}
+          // boardId={boardId}
+          // handleUpdateOpenList={handleUpdateOpenList}
+        />
+      )}
     </div>
   );
 };

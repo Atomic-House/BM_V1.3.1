@@ -10,7 +10,7 @@ function Balance() {
     <Card extra={"p-4 h-full"}>
       <div
         className={`bg-image relative mt-[7px] flex h-fit w-full justify-between rounded-xl bg-brand-900 bg-ballanceDashboard bg-cover bg-right px-3 py-4 text-white dark:bg-navy-700`}
-        bgSize="cover"
+        bgsize="cover"
       >
         <div>
           <p className="text-sm font-medium">Credit Balance </p>
@@ -29,9 +29,9 @@ function Balance() {
               <path
                 d="M1 8.2C1.70238 11.8 4.5 18.5 11 18C17.5 17.5 18.2786 1 29.6571 1C41.0357 1 41.0357 20.0286 60 3.57143"
                 stroke="white"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               />
             </svg>
           </div>

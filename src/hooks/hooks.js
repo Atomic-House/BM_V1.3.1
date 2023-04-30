@@ -47,6 +47,11 @@ export async function delCards(id) {
   return result.documents;
 }
 
+export async function delList(id) {
+  const result = await databases.deleteDocument(PROJECT_ID, LISTS_ID, id);
+  return result.documents;
+}
+
 export async function getUser() {
   const result = await account.get();
   return result;

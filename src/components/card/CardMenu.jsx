@@ -1,20 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import Dropdown from "components/dropdown";
-import { AiOutlineUser } from "react-icons/ai";
-import { BsThreeDots } from "react-icons/bs";
-import { FiSettings } from "react-icons/fi";
-import { AiOutlineShop } from "react-icons/ai";
-import { TiLightbulb } from "react-icons/ti";
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { BsFillBookmarkPlusFill, BsFillBookmarkXFill, BsThreeDots, BsThreeDotsVertical } from "react-icons/bs";
+import { useMutation, useQueryClient } from "react-query";
+import { delList } from "hooks/hooks";
 
 function CardMenu(props) {
-  const { transparent, vertical } = props;
-  const [open, setOpen] = React.useState(false);
+  const { transparent, vertical, onOpen, list_data, handleUpdateOpenList} = props;
+  const [isOpen, setIsOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+
+  const deleteCard = useMutation({
+    mutationFn: (id) => {
+      return delList(id);
+    },
+    onSuccess: async () => {
+      queryClient.invalidateQueries('board');
+    },
+  });
+
+  const handleDeleteList = (id) => {
+    deleteCard.mutate(id);
+  };
+
   return (
-    <Dropdown
+   <Dropdown
       button={
         <button
-          onClick={() => setOpen(!open)}
+        onClick={() => setIsOpen(!isOpen)}
           className={`flex items-center text-xl hover:cursor-pointer ${
             transparent
               ? "bg-none text-white hover:bg-none active:bg-none"
@@ -35,34 +48,32 @@ function CardMenu(props) {
       animation={"origin-top-right transition-all duration-300 ease-in-out"}
       classNames={`${transparent ? "top-8" : "top-11"} right-0 w-max`}
       children={
-        <div className="z-50 w-max rounded-xl bg-white py-3 px-4 text-sm shadow-xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
-          <p className="hover:text-black flex cursor-pointer items-center gap-2 text-gray-600 hover:font-medium">
-            <span>
-              <AiOutlineUser />
-            </span>
-            Panel 1
-          </p>
-          <p className="hover:text-black mt-2 flex cursor-pointer items-center gap-2 pt-1 text-gray-600 hover:font-medium">
-            <span>
-              <AiOutlineShop />
-            </span>
-            Panel 2
-          </p>
-          <p className="hover:text-black mt-2 flex cursor-pointer items-center gap-2 pt-1 text-gray-600 hover:font-medium">
-            <span>
-              <TiLightbulb />
-            </span>
-            Panel 3
-          </p>
-          <p className="hover:text-black mt-2 flex cursor-pointer items-center gap-2 pt-1 text-gray-600 hover:font-medium">
-            <span>
-              <FiSettings />
-            </span>
-            Panel 4
-          </p>
-        </div>
+        <div className="z-50 w-max rounded-xl bg-white px-4 py-3 text-sm shadow-xl shadow-shadow-500 dark:!bg-navy-700 dark:shadow-none">
+        <button
+          onClick={onOpen}
+          className="hover:text-black flex cursor-pointer items-center gap-2 text-gray-600 hover:font-medium"
+        >
+          <span>
+            <BsFillBookmarkPlusFill />
+          </span>
+          Add Card
+        </button>
+        <button onClick={()=>handleUpdateOpenList(list_data)} className="hover:text-black mt-2 flex cursor-pointer items-center gap-2 pt-1 text-gray-600 hover:font-medium">
+          <span>
+            <BsFillBookmarkXFill />
+          </span>
+          Edit List
+        </button>
+        <button onClick={()=>handleDeleteList(list_data.$id)} className="hover:text-black mt-2 flex cursor-pointer items-center gap-2 pt-1 text-gray-600 hover:font-medium">
+          <span>
+            <BsFillBookmarkXFill />
+          </span>
+          Remove List
+        </button>
+      </div>
       }
     />
+    
   );
 }
 

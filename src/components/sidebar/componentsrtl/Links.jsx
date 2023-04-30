@@ -114,13 +114,13 @@ export function SidebarLinks(props) {
                 py="0px"
                 ps={route.icon ? null : "8px"}
               >
-                <list>
+                <div>
                   {
                     route.icon
                       ? createLinks(route.items) // for bullet accordion links
                       : createAccordionLinks(route.items) // for non-bullet accordion links
                   }
-                </list>
+                </div>
               </AccordionPanel>
             </AccordionItem>
           </Accordion>

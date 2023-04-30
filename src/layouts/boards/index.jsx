@@ -1,22 +1,35 @@
-import React from "react";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { Portal } from "@chakra-ui/portal";
-import Navbar from "components/navbar";
-import Sidebar from "components/sidebar";
-import Footer from "components/footer/Footer";
-import { MdHome } from "react-icons/md";
-import SingleBoard from "views/boards/dashboards/default/SingleBoard";
+import React from 'react';
+import {
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
+import { Portal } from '@chakra-ui/portal';
+import Navbar from 'components/navbar';
+import Sidebar from 'components/sidebar';
+import Footer from 'components/footer/Footer';
+import { MdHome } from 'react-icons/md';
+import SingleBoard from 'views/boards/dashboards/default/SingleBoard';
 // import routes from "routes.js";
-import { getBoards } from "hooks/hooks";
-import { useQuery } from "react-query";
-import Dashboard from "views/boards/dashboards/default";
+import { getBoards } from 'hooks/hooks';
+import { useQuery } from 'react-query';
+import Dashboard from 'views/boards/dashboards/default';
+import { getUser } from 'hooks/hooks';
 
 export default function Board(props) {
   const { ...rest } = props;
 
+  const navigate = useNavigate();
+
   const location = useLocation();
   const [open, setOpen] = React.useState(true);
-  const [currentRoute, setCurrentRoute] = React.useState("Board Dashboard");
+  const [currentRoute, setCurrentRoute] = React.useState('Board Dashboard');
+  const userQuery = useQuery({
+    queryKey: ['user'],
+    queryFn: getUser,
+  });
   const boardsQuery = useQuery({
     queryKey: ['boards'],
     queryFn: getBoards,
@@ -40,7 +53,7 @@ export default function Board(props) {
         ],
       },
     ];
-  
+
     if (boardsQuery.isSuccess) {
       const boardIDItem = boardsQuery.data.map((board) => ({
         name: board.title,
@@ -51,13 +64,12 @@ export default function Board(props) {
       }));
       defaultRoutes[0].items.push(...boardIDItem);
     }
-  
+
     return defaultRoutes;
   }, [boardsQuery]);
-  
 
   React.useEffect(() => {
-    window.addEventListener("resize", () =>
+    window.addEventListener('resize', () =>
       window.innerWidth < 1200 ? setOpen(false) : setOpen(true)
     );
   }, []);
@@ -67,7 +79,7 @@ export default function Board(props) {
   }, [location.pathname]);
   // functions for changing the states from components
   const getActiveRoute = (routes) => {
-    let activeRoute = "Default Brand Text";
+    let activeRoute = 'Default Brand Text';
     for (let i = 0; i < routes.length; i++) {
       if (routes[i].collapse) {
         let collapseActiveRoute = getActiveRoute(routes[i].items);
@@ -135,28 +147,37 @@ export default function Board(props) {
     }
     return activeNavbar;
   };
-  const getRoutes = (routes) => {
-    
-    return routes.map((prop, key) => {
-      if (prop.layout === "/boards") {
-        return (
-          <Route path={`${prop.path}`} element={prop.component} key={key} />
-        );
-      }
-      if (prop.collapse) {
-        return getRoutes(prop.items);
-      }
-      if (prop.category) {
-        return getRoutes(prop.items);
-      } else {
-        return null;
-      }
-    });
-  };
-  document.documentElement.dir = "ltr";
+  // const getRoutes = (routes) => {
+
+  //   return routes.map((prop, key) => {
+  //     if (prop.layout === "/boards") {
+  //       return (
+  //         <Route path={`${prop.path}`} element={prop.component} key={key} />
+  //       );
+  //     }
+  //     if (prop.collapse) {
+  //       return getRoutes(prop.items);
+  //     }
+  //     if (prop.category) {
+  //       return getRoutes(prop.items);
+  //     } else {
+  //       return null;
+  //     }
+  //   });
+  // };
+  document.documentElement.dir = 'ltr';
+
+  if (userQuery.status === 'loading') {
+    return <div className="justify-center self-center">Loading...</div>;
+  }
+
+  if (userQuery.status === 'error') {
+    return navigate('/auth/sign-in/default');
+  }
+
   return (
     <div className="flex h-full w-full">
-      <Sidebar open={open} onClose={() => setOpen(false)} routes={routes} />
+      <Sidebar open={open} onClose={() => setOpen(false)} routes={routes} user={userQuery.data} />
       {/* Navbar & Main Content */}
       <div className="h-full w-full font-dm dark:bg-navy-900">
         {/* Main Content */}
@@ -168,8 +189,9 @@ export default function Board(props) {
             <Portal>
               <Navbar
                 onOpenSidenav={() => setOpen(!open)}
-                logoText={"Horizon UI Dashboard PRO"}
+                logoText={'Bookmark Manager - Atomic House'}
                 brandText={currentRoute}
+                userData={userQuery.data}
                 secondary={getActiveNavbar(routes)}
                 message={getActiveNavbarText(routes)}
                 {...rest}
@@ -183,10 +205,7 @@ export default function Board(props) {
                   path="/"
                   element={<Navigate to="/boards/dashboards/default" replace />}
                 />
-                <Route
-                  path="/:boardId"
-                  element={<SingleBoard />}
-                />
+                <Route path="/:boardId" element={<SingleBoard userQuery={userQuery.data} />} />
               </Routes>
             </div>
             <div className="p-3">
