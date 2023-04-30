@@ -1,6 +1,7 @@
 {
   "name": "horizon-tailwind-react-pro",
   "version": "1.1.0",
+  "homepage": "/",
   "private": true,
   "dependencies": {
     "@asseinfo/react-kanban": "^2.2.0",
