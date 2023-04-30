@@ -4,6 +4,7 @@ import TaskCard from 'views/admin/dashboards/rtl/components/TaskCard';
 import { getBoard } from 'hooks/hooks';
 import ModalList from './modal/ModalList';
 import { useParams } from 'react-router-dom';
+import Loading from 'components/Loading';
 
 const SingleBoard = ({ userQuery }) => {
   let { boardId } = useParams();
@@ -35,7 +36,11 @@ const SingleBoard = ({ userQuery }) => {
   };
 
   if (boardQuery.status === 'loading') {
-    return <h1>Loading...</h1>;
+    return (
+      <div className="flex w-full h-screen items-center justify-center">
+        <Loading />
+      </div>
+    );
   }
 
   if (boardQuery.status === 'error') {
