@@ -17,6 +17,7 @@ import { getBoards } from 'hooks/hooks';
 import { useQuery } from 'react-query';
 import Dashboard from 'views/boards/dashboards/default';
 import { getUser } from 'hooks/hooks';
+import Loading from 'components/Loading';
 
 export default function Board(props) {
   const { ...rest } = props;
@@ -168,7 +169,11 @@ export default function Board(props) {
   document.documentElement.dir = 'ltr';
 
   if (userQuery.status === 'loading') {
-    return <div className="justify-center self-center">Loading...</div>;
+    return (
+      <div className="flex h-screen w-screen items-center justify-center">
+        <Loading />
+      </div>
+    );
   }
 
   if (userQuery.status === 'error') {
@@ -177,7 +182,12 @@ export default function Board(props) {
 
   return (
     <div className="flex h-full w-full">
-      <Sidebar open={open} onClose={() => setOpen(false)} routes={routes} user={userQuery.data} />
+      <Sidebar
+        open={open}
+        onClose={() => setOpen(false)}
+        routes={routes}
+        user={userQuery.data}
+      />
       {/* Navbar & Main Content */}
       <div className="h-full w-full font-dm dark:bg-navy-900">
         {/* Main Content */}
@@ -205,7 +215,10 @@ export default function Board(props) {
                   path="/"
                   element={<Navigate to="/boards/dashboards/default" replace />}
                 />
-                <Route path="/:boardId" element={<SingleBoard userQuery={userQuery.data} />} />
+                <Route
+                  path="/:boardId"
+                  element={<SingleBoard userQuery={userQuery.data} />}
+                />
               </Routes>
             </div>
             <div className="p-3">

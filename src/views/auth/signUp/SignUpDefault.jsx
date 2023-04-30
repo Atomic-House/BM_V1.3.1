@@ -24,8 +24,9 @@ function SignUpDefault() {
 
     try {
       await account.create(ID.unique(),user.email, user.password);
+      await account.createEmailSession(user.email, user.password);
       setLoader(false);
-      navigate("/");
+      navigate("/boards/dashboards/default");
     } catch (error) {
       setError(error.message);
       console.log(error)
